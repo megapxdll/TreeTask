@@ -24,5 +24,9 @@ public class main {
         tree.add(81);
 
         tree.display();
+
+        tree.remove(70);
+
+        tree.display();
     }
 }
