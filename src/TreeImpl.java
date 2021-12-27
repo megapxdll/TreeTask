@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 public class TreeImpl<E extends Comparable<? super  E>> implements Tree<E> {
 
     private Node<E> root;
@@ -42,7 +44,26 @@ public class TreeImpl<E extends Comparable<? super  E>> implements Tree<E> {
 
     @Override
     public boolean add(E value) {
-        return false;
+        NodeAndParent nodeAndParent = doFind(value);
+
+        if (nodeAndParent.current != null) {
+
+            return false;
+        }
+
+        Node<E> parent = nodeAndParent.parent;
+        Node<E> node = new Node<>(value);
+
+        if(isEmpty()) {
+            root = node;
+        } else if (parent.isLeftChild(value)) {
+            parent.setLeftChild(node);
+        } else {
+            parent.setRightChild(node);
+        }
+
+        size++;
+        return true;
     }
 
     @Override
@@ -51,18 +72,60 @@ public class TreeImpl<E extends Comparable<? super  E>> implements Tree<E> {
     }
 
     @Override
-    public boolean isEmpty(E value) {
-        return false;
+    public boolean isEmpty() {
+        return size == 0;
     }
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public void display() {
+        Stack<Node<E>> globalStack = new Stack<>();
+        globalStack.push(root);
+        int nBlanks = 64;
 
+        boolean isRowEmpty = false;
+        System.out.println("................................................................");
+
+        while (!isRowEmpty) {
+            Stack<Node<E>> localStack = new Stack<>();
+
+            isRowEmpty = true;
+            for (int i = 0; i < nBlanks; i++) {
+                System.out.print(" ");
+            }
+
+            while (!globalStack.isEmpty()) {
+                Node<E> tempNode = globalStack.pop();
+                if (tempNode != null) {
+                    System.out.print(tempNode.getValue());
+                    localStack.push(tempNode.getLeftChild());
+                    localStack.push(tempNode.getRightChild());
+                    if (tempNode.getLeftChild() != null || tempNode.getRightChild() != null) {
+                        isRowEmpty = false;
+                    }
+                } else {
+                    System.out.print("--");
+                    localStack.push(null);
+                    localStack.push(null);
+                }
+                for (int j = 0; j < nBlanks * 2 - 2; j++) {
+                    System.out.print(" ");
+                }
+            }
+
+            System.out.println();
+
+            while (!localStack.isEmpty()) {
+                globalStack.push(localStack.pop());
+            }
+
+            nBlanks /= 2;
+        }
+        System.out.println("................................................................");
     }
 
     @Override

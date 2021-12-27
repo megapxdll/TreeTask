@@ -10,7 +10,7 @@ public interface Tree<E extends Comparable<? super E>> {
 
     boolean remove(E value);
 
-    boolean isEmpty(E value);
+    boolean isEmpty();
 
     int size();
 
