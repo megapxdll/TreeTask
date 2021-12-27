@@ -201,6 +201,41 @@ public class TreeImpl<E extends Comparable<? super  E>> implements Tree<E> {
 
     @Override
     public void traverse(TraversMode mode) {
+        switch (mode) {
+            case PRE_ORDER: preOrder(root);
+            case IN_ORDER: inOrder(root);
+            case POST_ORDER: postOrder(root);
+        }
+        System.out.println();
+    }
 
+    private void postOrder(Node<E> current) {
+        if (current == null) {
+            return;
+        }
+
+        postOrder(current.getLeftChild());
+        postOrder(current.getRightChild());
+        System.out.print(current.getValue() + " ");
+    }
+
+    private void inOrder(Node<E> current) {
+        if (current == null) {
+            return;
+        }
+
+        inOrder(current.getLeftChild());
+        System.out.print(current.getValue() + " ");
+        inOrder(current.getRightChild());
+    }
+
+    private void preOrder(Node<E> current) {
+        if (current == null) {
+            return;
+        }
+
+        System.out.print(current.getValue() + " ");
+        preOrder(current.getLeftChild());
+        preOrder(current.getRightChild());
     }
 }
