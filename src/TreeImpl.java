@@ -68,7 +68,78 @@ public class TreeImpl<E extends Comparable<? super  E>> implements Tree<E> {
 
     @Override
     public boolean remove(E value) {
-        return false;
+        NodeAndParent nodeAndParent = doFind(value);
+        Node<E> removed = nodeAndParent.current;
+        Node<E> parent = nodeAndParent.parent;
+
+        if (removed == null) {
+            return false;
+        }
+
+        if (removed.isLeaf()) {
+            removeLeafNode(removed, parent);
+        } else if (removed.hasOnlyOneChild()) {
+            removeNodeWithOneChild(removed, parent);
+        } else {
+            removeNodeWithAllChildren(removed, parent);
+        }
+
+        size--;
+        return true;
+    }
+
+    private void removeNodeWithAllChildren(Node<E> removed, Node<E> parent) {
+        Node<E> successor = getSuccessor(removed);
+
+        if (removed == root) {
+            root = successor;
+        } else if (parent.isLeftChild(removed.getValue())) {
+            parent.setLeftChild(successor);
+        } else {
+            parent.setRightChild(successor);
+        }
+    }
+
+    private Node<E> getSuccessor(Node<E> removed) {
+        Node<E> successor = removed;
+        Node<E> successorParent = null;
+        Node<E> current = removed.getRightChild();
+
+        while (current != null) {
+            successorParent = successor;
+            successor = current;
+            current = current.getLeftChild();
+        }
+
+        if (successor != removed.getRightChild() && successorParent != null) {
+            successorParent.setLeftChild(successor.getRightChild());
+            successor.setRightChild(removed.getRightChild());
+        }
+        successor.setLeftChild(removed.getLeftChild());
+
+        return successor;
+    }
+
+    private void removeNodeWithOneChild(Node<E> removed, Node<E> parent) {
+        Node<E> child = removed.getLeftChild() != null
+                ? removed.getLeftChild()
+                : removed.getRightChild();
+
+        if (removed == root) {
+            root = child;
+        } else if(parent.isLeftChild(removed.getValue())) {
+            parent.setLeftChild(child);
+        } else parent.setRightChild(child);
+    }
+
+    private void removeLeafNode(Node<E> removed, Node<E> parent) {
+        if (removed == root) {
+            root = null;
+        } else if (parent.isLeftChild(removed.getValue())) {
+            parent.setLeftChild(null);
+        } else {
+            parent.setRightChild(null);
+        }
     }
 
     @Override

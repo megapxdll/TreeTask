@@ -36,4 +36,12 @@ public class Node<T extends Comparable<? super T>> {
     public boolean isLeftChild(T value) {
         return getValue().compareTo(value) > 0;
     }
+
+    public boolean isLeaf() {
+        return leftChild == null && rightChild == null;
+    }
+
+    public boolean hasOnlyOneChild() {
+        return getRightChild() != null ^ getLeftChild() != null;
+    }
 }
