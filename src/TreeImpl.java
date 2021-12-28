@@ -9,7 +9,7 @@ public class TreeImpl<E extends Comparable<? super  E>> implements Tree<E> {
         private Node<E> current;
         private Node<E> parent;
 
-        public NodeAndParent(Node<E> current, Node<E> parent) {
+        public NodeAndParent(Node<E> current, Node<E> parent, int level) {
             this.current = current;
             this.parent = parent;
         }
@@ -24,10 +24,11 @@ public class TreeImpl<E extends Comparable<? super  E>> implements Tree<E> {
     private NodeAndParent doFind(E value) {
         Node<E> current = root;
         Node<E> parent = null;
+        int level = 1;
 
         while (current != null) {
             if (current.getValue().equals(value)) {
-                return new NodeAndParent(current, parent);
+                return new NodeAndParent(current, parent, level);
             }
 
             parent = current;
@@ -37,9 +38,10 @@ public class TreeImpl<E extends Comparable<? super  E>> implements Tree<E> {
             } else {
                 current = parent.getRightChild();
             }
+            level++;
         }
 
-        return new NodeAndParent(null, parent);
+        return new NodeAndParent(null, parent, level);
     }
 
     @Override
@@ -47,7 +49,6 @@ public class TreeImpl<E extends Comparable<? super  E>> implements Tree<E> {
         NodeAndParent nodeAndParent = doFind(value);
 
         if (nodeAndParent.current != null) {
-
             return false;
         }
 
@@ -100,26 +101,6 @@ public class TreeImpl<E extends Comparable<? super  E>> implements Tree<E> {
         }
     }
 
-    private Node<E> getSuccessor(Node<E> removed) {
-        Node<E> successor = removed;
-        Node<E> successorParent = null;
-        Node<E> current = removed.getRightChild();
-
-        while (current != null) {
-            successorParent = successor;
-            successor = current;
-            current = current.getLeftChild();
-        }
-
-        if (successor != removed.getRightChild() && successorParent != null) {
-            successorParent.setLeftChild(successor.getRightChild());
-            successor.setRightChild(removed.getRightChild());
-        }
-        successor.setLeftChild(removed.getLeftChild());
-
-        return successor;
-    }
-
     private void removeNodeWithOneChild(Node<E> removed, Node<E> parent) {
         Node<E> child = removed.getLeftChild() != null
                 ? removed.getLeftChild()
@@ -140,6 +121,26 @@ public class TreeImpl<E extends Comparable<? super  E>> implements Tree<E> {
         } else {
             parent.setRightChild(null);
         }
+    }
+
+    private Node<E> getSuccessor(Node<E> removed) {
+        Node<E> successor = removed;
+        Node<E> successorParent = null;
+        Node<E> current = removed.getRightChild();
+
+        while (current != null) {
+            successorParent = successor;
+            successor = current;
+            current = current.getLeftChild();
+        }
+
+        if (successor != removed.getRightChild() && successorParent != null) {
+            successorParent.setLeftChild(successor.getRightChild());
+            successor.setRightChild(removed.getRightChild());
+        }
+        successor.setLeftChild(removed.getLeftChild());
+
+        return successor;
     }
 
     @Override
