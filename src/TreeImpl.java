@@ -8,6 +8,7 @@ public class TreeImpl<E extends Comparable<? super  E>> implements Tree<E> {
     private class NodeAndParent {
         private Node<E> current;
         private Node<E> parent;
+        private Node<E> level;
 
         public NodeAndParent(Node<E> current, Node<E> parent, int level) {
             this.current = current;

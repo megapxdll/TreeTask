@@ -1,4 +1,4 @@
-
+import java.util.Random;
 
 public class main {
     public static void main(String[] args) {
@@ -32,5 +32,13 @@ public class main {
         tree.traverse(Tree.TraversMode.IN_ORDER);
         tree.traverse(Tree.TraversMode.PRE_ORDER);
         tree.traverse(Tree.TraversMode.POST_ORDER);
+    }
+
+    private static Tree<Integer> TreeGenerator() {
+        Random random = new Random();
+        Tree[] trees = new TreeImpl[20];
+        for (int i = 0; i < trees.length; i++) {
+        }
+        return trees[4];
     }
 }
