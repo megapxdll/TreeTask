@@ -12,6 +12,8 @@ public interface Tree<E extends Comparable<? super E>> {
 
     boolean isEmpty();
 
+    boolean isBalanced(Node<E> bode);
+
     int size();
 
     void display();
