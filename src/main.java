@@ -1,7 +1,12 @@
-
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 
 public class main {
     public static void main(String[] args) {
+        /**
         Tree<Integer> tree = new TreeImpl<>();
 
         tree.add(60);
@@ -32,5 +37,26 @@ public class main {
         tree.traverse(Tree.TraversMode.IN_ORDER);
         tree.traverse(Tree.TraversMode.PRE_ORDER);
         tree.traverse(Tree.TraversMode.POST_ORDER);
+         */
+
+        TreeGenerator();
     }
+
+    private static void TreeGenerator() {
+        int a = -25;
+        int b = 25;
+        int countTrees = 4;
+
+        for (int i = 0; i < countTrees; i++) {
+            Tree<Integer> tree = new TreeImpl<>();
+            for (int j = 0; j < 20; j++) {
+                int random = a + (int)(Math.random() * ((b - a) + 1));
+                tree.add(random);
+            }
+
+            tree.display();
+        }
+
+    }
+
 }
