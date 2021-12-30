@@ -1,7 +1,12 @@
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class main {
     public static void main(String[] args) {
+        /**
         Tree<Integer> tree = new TreeImpl<>();
 
         tree.add(60);
@@ -32,13 +37,36 @@ public class main {
         tree.traverse(Tree.TraversMode.IN_ORDER);
         tree.traverse(Tree.TraversMode.PRE_ORDER);
         tree.traverse(Tree.TraversMode.POST_ORDER);
+         */
+
+        TreeGenerator();
     }
 
-    private static Tree<Integer> TreeGenerator() {
-        Random random = new Random();
-        Tree[] trees = new TreeImpl[20];
-        for (int i = 0; i < trees.length; i++) {
-        }
-        return trees[4];
+    public static boolean isBalanced(Node node) {
+        return (node == null) ||
+                isBalanced(node.getLeftChild()) &&
+                        isBalanced(node.getRightChild()) &&
+                        Math.abs(height(node.getLeftChild()) - height(node.getRightChild())) <= 1;
     }
+    private static int height(Node node) {
+        return node == null ? 0 : 1 + Math.max(height(node.getLeftChild()), height(node.getRightChild()));
+    }
+
+    private static void TreeGenerator() {
+        int a = -25;
+        int b = 25;
+        int countTrees = 4;
+
+        for (int i = 0; i < countTrees; i++) {
+            Tree<Integer> tree = new TreeImpl<>();
+            for (int j = 0; j < 20; j++) {
+                int random = a + (int)(Math.random() * ((b - a) + 1));
+                tree.add(random);
+            }
+
+            tree.display();
+        }
+
+    }
+
 }
